@@ -1,0 +1,122 @@
+version: "3.9"
+
+volumes:
+
+  cert-ca:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: "/data/jenkins_cert/ca"
+    name: jenkins-cert-ca
+
+  cert-client:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: "/data/jenkins_cert/client"
+    name: jenkins-cert-client
+
+  data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: "/data/jenkins_home"
+    name: jenkins-data
+
+services:
+
+  jenkins:
+    build:
+      context: .
+      dockerfile: "Dockerfile"
+    container_name: "jenkins-main"
+    environment:
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_CERT_PATH=/certs/client 
+      - DOCKER_TLS_VERIFY=1 
+    image: "jenkins-blueocean:2.387-jdk11"
+    networks: 
+      - net
+    ports:
+      - "8080:8080/tcp"
+      - "50000:50000/tcp"
+    privileged: true
+    restart: on-failure
+    user: root
+    volumes:
+      - cert-client:/certs/client:ro
+      - data:/var/jenkins_home
+    working_dir: "/var/jenkins_home"
+
+  docker-dind:
+    container_name: "jenkins-docker"
+    image: "docker:dind"
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
+    networks: 
+      net:
+        aliases: 
+          - docker
+    ports:
+      - "2376:2376/tcp"
+    privileged: true
+    user: root
+    volumes:
+      - cert-ca:/certs/ca
+      - cert-client:/certs/client
+      - data:/var/jenkins_home
+
+  centos:
+    build:
+      args:
+        - key=jenkins_key
+        - username=centos
+      context: .
+      dockerfile: "centos.Dockerfile"
+    container_name: "centos-agent"
+    image: "centos/ssh:7"
+    networks: 
+      - net
+    volumes:
+      - cert-ca:/certs/ca
+      - cert-client:/certs/client
+      - data:/var/jenkins_home
+
+  debian:
+    build:
+      args:
+        - key=jenkins_key
+        - username=debian
+      context: .
+      dockerfile: "debian.Dockerfile"
+    container_name: "debian-agent"
+    image: "debian/ssh:11"
+    networks: 
+      - net
+    volumes:
+      - cert-ca:/certs/ca
+      - cert-client:/certs/client
+      - data:/var/jenkins_home
+
+  ubuntu:
+    build:
+      args:
+        - key=jenkins_key
+        - username=ubuntu
+      context: .
+      dockerfile: "ubuntu.Dockerfile"
+    container_name: "ubuntu-agent"
+    image: "ubuntu/ssh:22.04"
+    networks: 
+      - net
+    volumes:
+      - cert-ca:/certs/ca
+      - cert-client:/certs/client
+      - data:/var/jenkins_home
+
+networks: 
+    net:
+      driver: bridge

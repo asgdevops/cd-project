@@ -1,0 +1,6 @@
+ssh-keygen -f "$HOME/.ssh/known_hosts" -R "172.17.0.2"
+
+docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' jblue
+
+
+docker cp jkey.pub jblue:/var/jenkins_home/.ssh/authorized_keyss
