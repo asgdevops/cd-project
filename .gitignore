@@ -1,3 +1,6 @@
+backup/
+*.bak
+*.bkp
 temp/
 tmp/
 *.tmp
