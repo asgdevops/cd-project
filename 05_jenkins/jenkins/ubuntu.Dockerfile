@@ -40,10 +40,17 @@ RUN mkdir /var/run/sshd
 ADD sshd_config /etc/ssh/sshd_config
 RUN ssh-keygen -A -v
 
-# install packages: git, java, and maven
+# install packages: git, and java
 RUN apt install -y git && \
-    apt install -y openjdk-11-jdk && \
-    apt install -y maven 
+    apt install -y openjdk-11-jdk 
+
+# Install terraform
+RUN apt update && \
+    apt upgrade -y && \
+    apt install -y gnupg software-properties-common curl && \
+    curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - && \
+    apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" && \
+    apt update && apt install -y terraform
 
 # Cleanup old packages
 RUN apt -y autoremove 
@@ -55,4 +62,4 @@ WORKDIR /home/$username
 EXPOSE 22
 CMD ["/usr/bin/sudo", "/usr/sbin/sshd", "-D"]
 
-# docker build . --build-arg key=jenkins_key --build-arg username=ubuntu -f ubuntu-base.Dockerfile -t ubuntu/ssh:22.04
+# docker build . --build-arg key=jenkins_key --build-arg username=ubuntu -f ubuntu.Dockerfile -t ubuntu/ssh:22.04

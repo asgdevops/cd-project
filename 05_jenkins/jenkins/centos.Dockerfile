@@ -35,9 +35,13 @@ RUN ssh-keygen -A -v
 
 # install packages: git, java, and maven
 RUN yum install -y git.x86_64 && \
-    yum install -y java-11-openjdk.x86_64 && \
+    yum install -y java-11-openjdk-devel && \
     yum install -y maven && \
     yum install -y python3.x86_64 
+
+# Update the java version to jdk11
+RUN mv /etc/alternatives/java /etc/alternatives/java.old && \
+    ln -s /usr/lib/jvm/java-11-openjdk-11.0.17.0.8-2.el7_9.x86_64/bin/java /etc/alternatives/java
 
 USER $username
 WORKDIR /home/$username

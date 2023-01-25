@@ -1,0 +1,7 @@
+temp/
+tmp/
+*.tmp
+logs/
+*.logs
+.terraform
+terraform.tfvars
