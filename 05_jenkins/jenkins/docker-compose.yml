@@ -69,6 +69,22 @@ services:
       - cert-client:/certs/client
       - data:/var/jenkins_home
 
+  alpine:
+    build:
+      args:
+        - key=jenkins_key
+        - username=alpine
+      context: .
+      dockerfile: "alpine.Dockerfile"
+    container_name: "alpine-controller"
+    image: "alpine/ssh:3.17"
+    networks: 
+      - net
+    volumes:
+      - cert-ca:/certs/ca
+      - cert-client:/certs/client
+      - data:/var/jenkins_home
+
   centos:
     build:
       args:
