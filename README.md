@@ -14,14 +14,15 @@ Author: [Antonio Salazar Gomez](mailto:antonio.salazar@ymail.com).
 
 # :bookmark_tabs: Table of Contents
 
-1. [Install Ubuntu 22.04 Server Virtual Machine on VirtualBox](https://github.com/asgdevops/virtualization/blob/main/virtualbox/vm/ubuntu2204/README.md)
+1. [Build a home laboratory with VirtualBox](01_build_home_lab/README.md)
 
-2. [Set-Up Docker on Ubuntu 22.04 VM](02_setup_docker_on_ubuntu_vm/README.md)
+2. [Create a new Ubuntu 22.04 Virtual Machine in VirtualBox](02_create_vm_with_ubuntu2204/README.md)
 
 3. [Configure a virtual network with Oracle VM VirtualBox Manager](03_configure_virtual_network/README.md)
 
 4. [Install Docker Engine on Ubuntu 22.04 VM](04_setup_docker_on_ubuntu_vm/README.md)
 
+5. [Install Docker Engine on Ubuntu 22.04 VM](04_setup_docker_on_ubuntu_vm/README.md)
 
 <br/>
 
