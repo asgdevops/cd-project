@@ -32,6 +32,7 @@ services:
         aliases: 
           - docker
     ports:
+      - "22:22/tcp"
       - "2376:2376/tcp"
     privileged: true
     user: root

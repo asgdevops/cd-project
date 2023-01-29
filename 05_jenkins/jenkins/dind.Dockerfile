@@ -23,11 +23,20 @@ COPY $key.pub /home/$username/.ssh/authorized_keys
 RUN chown $(id -u $username):$(id -g $username) -R /home/$username/.ssh && \
     chmod 600 /home/$username/.ssh/authorized_keys
 
+# Install ssh server
+RUN apk add --no-cache openssh
+
+# Configure SSHD
+RUN mkdir /var/run/sshd
+ADD ./sshd_config /etc/ssh/sshd_config
+RUN ssh-keygen -A -v
+
 USER $username
 WORKDIR /home/$username
 
-EXPOSE 2376
+EXPOSE 22/tcp
+EXPOSE 2376/tcp
 ENTRYPOINT [ "dockerd-entrypoint.sh" ]
-CMD ["/usr/bin/sudo", "dockerd-entrypoint.sh"]
+CMD ["/usr/bin/sudo", "/usr/sbin/sshd", "-D"]
 
-# docker build . --build-arg key=jenkins_key --build-arg username=jenkins -f dind.Dockerfile -t dind/ssh:3.17
+# sudo docker build . --build-arg key=jenkins_key --build-arg username=jenkins -f dind.Dockerfile -t dind/ssh:3.17
