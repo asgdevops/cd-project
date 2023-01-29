@@ -16,13 +16,20 @@ Author: [Antonio Salazar Gomez](mailto:antonio.salazar@ymail.com).
 
 1. [Build a home laboratory with VirtualBox](01_build_home_lab/README.md)
 
-2. [Create a new Ubuntu 22.04 Virtual Machine in VirtualBox](02_create_vm_with_ubuntu2204/README.md)
+2. [Set-Up Docker on Ubuntu 22.04 VM](02_create_vm_with_ubuntu2204/README.md)
 
 3. [Configure a virtual network with Oracle VM VirtualBox Manager](03_configure_virtual_network/README.md)
 
 4. [Install Docker Engine on Ubuntu 22.04 VM](04_setup_docker_on_ubuntu_vm/README.md)
 
-5. [Install Docker Engine on Ubuntu 22.04 VM](04_setup_docker_on_ubuntu_vm/README.md)
+5. [Installing and configuring Jenkins](05_jenkins/README.md)
+
+6. [Provision an EC2 Instance in AWS Platform](06_terraform/README.md)
+
+7. [Install Jenkins onAWS EC2 Instance](07_install_jenkins_on_aws_ec2/README.md) 
+
+8. [Set up a WebHook trigger in Jenkins and Github ](08_webhook_setup/README.md)
+
 
 <br/>
 
