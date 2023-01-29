@@ -48,6 +48,7 @@ services:
       - net
     volumes:
       - data:${JENKINS_HOME}
+ 
   debian:
     build:
       args:
@@ -88,4 +89,3 @@ volumes:
       o: 'bind'
       device: "${data_dir}"
     name: ${volume_data}
-
