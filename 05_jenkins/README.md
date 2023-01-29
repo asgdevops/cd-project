@@ -132,7 +132,7 @@ As a result, follow the steps below to complete the Jenkins installation.
     |:--:|
     |Figure 4a - install_jenkins.sh part I |
 
-    When the installation process gets complete, you should see five containers running:
+    When the installation process gets completed, you should see five containers running:
 
     |No.|Container|Descriptions|
     |--:|--|--|
@@ -254,15 +254,145 @@ As a result, follow the steps below to complete the Jenkins installation.
 
 
 # Configuring Jenkins Part II: Set up the Agent Nodes
-8. Add the SSH and the CloudBees plugins.
+8. Add the **SSH Agent** and the **CloudBees** plugins.
+
+    |![jenkins](images/jenkins_setup_aws_creds_01.png)|
+    |:--:|
+    |Figure 8a - Jenkins AWS CloudBeess plugin|
+
+    |![jenkins](images/jenkins_setup_aws_creds_02.png)|
+    |:--:|
+    |Figure 8b - Jenkins AWS CloudBeess plugin|
+
+9. Add the **AWS Account**credentials.
+
+    |![jenkins](images/jenkins_setup_aws_creds_03.png)|
+    |:--:|
+    |Figure 9a - Jenkins AWS credentials|
+
+    |![jenkins](images/jenkins_setup_aws_creds_04.png)|
+    |:--:|
+    |Figure 9b - Jenkins AWS Credentials|
+
+    |![jenkins](images/jenkins_setup_aws_creds_05.png)|
+    |:--:|
+    |Figure 9c - Jenkins AWS Credentials|
+
+
+10. Add the Alpine, CentOS, Debian and Ubuntu nodes accordingly.
+
+    - Go to **Manage Jenkins** 
+
+      |![jenkins](images/jenkins_node_setup_01.png)|
+      |:--:|
+      |Figure 10a - Manage Jenkins|
+
+    - **Manage nodes and clouds**
+
+      |![jenkins](images/jenkins_node_setup_02.png)|
+      |:--:|
+      |Figure 10b - Manage Nodes and Clouds|
+
+    - Click on **+ New node**
+
+      |![jenkins](images/jenkins_node_setup_03.png)|
+      |:--:|
+      |Figure 10c - New Node|
+
+    - Enter the **Node Name** and click on **Create**
+
+      |![jenkins](images/jenkins_node_setup_04.png)|
+      |:--:|
+      |Figure 10d - Node Name|
+
+      _Jenkins allow to copy from another node to speed up filling up the fields._
+
+    - Select Type **Permanent Agent**
+    - Click on **Create**
+    - Depending on the node, type the corresponding node name [Alpine || Centos || Debian || Ubuntu]
+    - Number of Executors: **3**
+    - Remote root directory: `/home/jenkins`. _The reason of this, is because when building the docker images, jenkins user was created within its SSH keys._
+    - In lables enter the following:
+      - For Alpine controler: **`alpine_controller`**.
+      - For the rest of the agents: **`[centos||debian||ubuntu]_worker`**.
+    - Usage: **Only build jobs with label expressions matching this node**.
+    - Launch method: Launch agents via SSH.
+
+      |![jenkins](images/jenkins_node_setup_05.png)|
+      |:--:|
+      |Figure 10e - Permanent Agent|
+
+    - On Credentials, it this is the first time you input the credential :
+      - click on **+ Add**
+      - On the Jenkins Credentials Provider: Jenkins Screen.
+        - Domain: **Global credentials (unrestricted)**
+        - Kind: **SSH Username with pivate key**
+        - Scope: **Global (Jenkins, nodes, items, all child items, etc.)**
+        - Id: **agent_ssh_jenkins**
+        - Description: **Jenkins Agent SSH Private Key**
+        - Username: **jenkins**
+        - Private Key: **selected**
+        - Go to your terminal and open the **`jenkins_key`** file and copy its contents.
+        - Go back to the Jenkins Credential screen, and click on the **Add** button. 
+        - Paste the private SSH key.
+        - **Save**.
+        - This takes you back to the previous screen, so choose the ssh credentials just entered.
+        - Host Key verification strategy: **Non verifying Verification Strategy**.
+        - Availability: **Keep this agent online as much as possible**. 
+
+        |![jenkins](images/jenkins_node_setup_06.png)|
+        |:--:|
+        |Figure 10f - Permanent Agent|
+
+      - At the end you should see the screen with all the agents summary.
+
+        |![jenkins](images/jenkins_node_setup_07.png)|
+        |:--:|
+        |Figure 10g - Permanent Agent|
 
 
 
-9.  Add the Alpine, CentOS, Debian and Ubuntu nodes accordingly.
+11. Run the [ansible_hello.pipeline](https://github.com/asgdevops/cd-project-ansible/blob/main/ansible_hello.jenkinsfile) to the a simple test.
+
+- Go to Jenkins Dashboard
+- Click on +New Item
+- Type `ansible_version.pipeline` 
+- Select **Piepline** and click **OK**
+- Fill in the follwing fields
+  - Check **Discard Old builds** to save disk space.
+  - Choose the number of days or runs you would like to keep. 
+
+    |![jenkins](images/jenkins_pipeline_setup_01.png)|
+    |:--:|
+    |Figure 11a - Permanent Agent|
+
+  - In the Pipeline section select the following:
+
+    - Definition: **Pipeline Script from SCM**
+      - SCM: **Git**
+      - Repository URL: (your repository) in this example [asgdevops/ansible](https://github.com/asgdevops/cd-project-ansible)
+      - Branch Specifier (blank for 'any'): ***/main**
+      - Script Path: (your pipeline script name) in this example [ansible_hello.jenkinsfile](https://github.com/asgdevops/cd-project-ansible/blob/main/ansible_hello.jenkinsfile)
+      - **Save**.
 
 
-10. Run the [ansible_hello.pipeline]() to the a simple test.
+      |![jenkins](images/jenkins_pipeline_setup_02.png)|
+      |:--:|
+      |Figure 11b - Pipeline|
+
+  - Build and monitor the job progress.
+
+    |![jenkins](images/jenkins_pipeline_setup_03.png)|
+    |:--:|
+    |Figure 11c - Permanent Agent|
+
+# :movie_camera: Set up jenkins recordings
+- [Set up Jenkins on AWS EC2](videos/Setup_jenkins.mp4)
 
 
 # :books: References
 - [Installing Jenkins - Docker](https://www.jenkins.io/doc/book/installing/docker/)
+
+## Repositories used in this phase
+- :link: [asgdevops/cd-project-ansible](https://github.com/asgdevops/cd-project-ansible)
+- :link:[asgdevops/pipelines](https://github.com/asgdevops/pipelines)
