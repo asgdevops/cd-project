@@ -387,7 +387,7 @@ As a result, follow the steps below to complete the Jenkins installation.
     |Figure 11c - Permanent Agent|
 
 # :movie_camera: Set up jenkins recordings
-- [Set up Jenkins on AWS EC2](videos/Setup_jenkins.mp4)
+- [Set up Jenkins on AWS EC2](videos/Setup_jenkins.mkv)
 
 
 # :books: References
