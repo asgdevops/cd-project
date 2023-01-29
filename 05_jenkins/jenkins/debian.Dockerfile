@@ -1,5 +1,8 @@
 # Build base image
 FROM debian:11-slim AS debian-base
+
+LABEL maintainer="Antonio Salazar <antonio.salazar.devops@gmail.com>"
+
 USER root
 
 # Disable interactive mode
@@ -36,10 +39,9 @@ RUN  mkdir /var/run/sshd
 ADD ./sshd_config /etc/ssh/sshd_config
 RUN ssh-keygen -A -v
 
-# install packages: git, java, and maven
+# install packages: git, java and python
 RUN apt install -y git && \
     apt install -y openjdk-11-jdk && \
-    apt install -y maven && \
     apt install -y python3 python3-pip
 
 # Cleanup old packages
@@ -52,5 +54,4 @@ WORKDIR /home/$username
 EXPOSE 22
 CMD ["/usr/bin/sudo", "/usr/sbin/sshd", "-D"]
 
-#...
-# docker build . --build-arg key=remote-key --build-arg username=debian -f debian.Dockerfile -t debian/ssh:11
+# docker build . --build-arg key=remote-key --build-arg username=jenkins -f debian.Dockerfile -t debian/ssh:11

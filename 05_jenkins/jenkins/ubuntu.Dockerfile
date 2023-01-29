@@ -26,6 +26,7 @@ RUN useradd -rm -d /home/$username -s /bin/bash -g root -G sudo -u 1000 $usernam
 # Set up the SSH key
 COPY $key.pub /home/$username/.ssh/authorized_keys
 
+# Grant privileges to default user on ~/.ssh directory
 RUN chown $(id -u $username):$(id -g $username) -R /home/$username/.ssh && \
     chmod 600 /home/$username/.ssh/authorized_keys
 
@@ -44,14 +45,6 @@ RUN ssh-keygen -A -v
 RUN apt install -y git && \
     apt install -y openjdk-11-jdk 
 
-# Install terraform
-RUN apt update && \
-    apt upgrade -y && \
-    apt install -y gnupg software-properties-common curl && \
-    curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - && \
-    apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" && \
-    apt update && apt install -y terraform
-
 # Cleanup old packages
 RUN apt -y autoremove 
 
@@ -62,4 +55,4 @@ WORKDIR /home/$username
 EXPOSE 22
 CMD ["/usr/bin/sudo", "/usr/sbin/sshd", "-D"]
 
-# docker build . --build-arg key=jenkins_key --build-arg username=ubuntu -f ubuntu.Dockerfile -t ubuntu/ssh:22.04
+# docker build . --build-arg key=jenkins_key --build-arg username=jenkins -f ubuntu.Dockerfile -t ubuntu/ssh:22.04

@@ -1,59 +1,30 @@
 version: "3.9"
 
-volumes:
-
-  cert-ca:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: "/data/jenkins_cert/ca"
-    name: jenkins-cert-ca
-
-  cert-client:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: "/data/jenkins_cert/client"
-    name: jenkins-cert-client
-
-  data:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: "/data/jenkins_home"
-    name: jenkins-data
-
 services:
 
   jenkins:
     build:
       context: .
-      dockerfile: "Dockerfile"
-    container_name: "jenkins-main"
-    environment:
-      - DOCKER_HOST=tcp://docker:2376
-      - DOCKER_CERT_PATH=/certs/client 
-      - DOCKER_TLS_VERIFY=1 
-    image: "jenkins-blueocean:2.387-jdk11"
+      dockerfile: "jenkins.Dockerfile"
+    container_name: "${container}"
+    env_file: .env
+    image: "${image}"
     networks: 
       - net
     ports:
-      - "8080:8080/tcp"
-      - "50000:50000/tcp"
+      - "${http_port}:8080/tcp"
+      - "${agent_port}:50000/tcp"
     privileged: true
     restart: on-failure
     user: root
     volumes:
       - cert-client:/certs/client:ro
-      - data:/var/jenkins_home
-    working_dir: "/var/jenkins_home"
+      - data:${JENKINS_HOME}
+    working_dir: "${JENKINS_HOME}"
 
   docker-dind:
-    container_name: "jenkins-docker"
-    image: "docker:dind"
+    container_name: "dind-agent"
+    image: "dind/ssh:3.17"
     environment:
       - DOCKER_TLS_CERTDIR=/certs
     networks: 
@@ -67,13 +38,13 @@ services:
     volumes:
       - cert-ca:/certs/ca
       - cert-client:/certs/client
-      - data:/var/jenkins_home
+      - data:${JENKINS_HOME}
 
   alpine:
     build:
       args:
-        - key=jenkins_key
-        - username=alpine
+        - key=${ssh_key}
+        - username=${username}
       context: .
       dockerfile: "alpine.Dockerfile"
     container_name: "alpine-controller"
@@ -81,15 +52,13 @@ services:
     networks: 
       - net
     volumes:
-      - cert-ca:/certs/ca
-      - cert-client:/certs/client
-      - data:/var/jenkins_home
+      - data:${JENKINS_HOME}
 
   centos:
     build:
       args:
-        - key=jenkins_key
-        - username=centos
+        - key=${ssh_key}
+        - username=${username}
       context: .
       dockerfile: "centos.Dockerfile"
     container_name: "centos-agent"
@@ -97,15 +66,12 @@ services:
     networks: 
       - net
     volumes:
-      - cert-ca:/certs/ca
-      - cert-client:/certs/client
-      - data:/var/jenkins_home
-
+      - data:${JENKINS_HOME}
   debian:
     build:
       args:
-        - key=jenkins_key
-        - username=debian
+        - key=${ssh_key}
+        - username=${username}
       context: .
       dockerfile: "debian.Dockerfile"
     container_name: "debian-agent"
@@ -113,15 +79,13 @@ services:
     networks: 
       - net
     volumes:
-      - cert-ca:/certs/ca
-      - cert-client:/certs/client
-      - data:/var/jenkins_home
+      - data:${JENKINS_HOME}
 
   ubuntu:
     build:
       args:
-        - key=jenkins_key
-        - username=ubuntu
+        - key=${ssh_key}
+        - username=${username}
       context: .
       dockerfile: "ubuntu.Dockerfile"
     container_name: "ubuntu-agent"
@@ -129,10 +93,34 @@ services:
     networks: 
       - net
     volumes:
-      - cert-ca:/certs/ca
-      - cert-client:/certs/client
-      - data:/var/jenkins_home
+      - data:${JENKINS_HOME}
 
 networks: 
     net:
       driver: bridge
+
+volumes:
+  cert-ca:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: "${certs_ca_dir}"
+    name: ${volume_certs_ca}
+
+  cert-client:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: "${certs_client_dir}"
+    name: ${volume_certs_client}
+
+  data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: "${data_dir}"
+    name: ${volume_data}
+
