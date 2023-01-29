@@ -29,6 +29,7 @@ The resources used in this lab, presented in this document, are configured in th
 
 
 In case your Virtual Machine requires additional disk space, follow the directions below to add more space:
+
 ## Prepare Jenkins storage
 
 1. Execute the steps found at [Adding storage ](adding_storage/README.md)
@@ -354,8 +355,8 @@ As a result, follow the steps below to complete the Jenkins installation.
 
 11. Run the [ansible_hello.pipeline](https://github.com/asgdevops/cd-project-ansible/blob/main/ansible_hello.jenkinsfile) to the a simple test.
 
-- Go to Jenkins Dashboard
-- Click on +New Item
+- Go to Jenkins **Dashboard**
+- Click on **+ New Item**
 - Type `ansible_version.pipeline` 
 - Select **Piepline** and click **OK**
 - Fill in the follwing fields
@@ -402,10 +403,18 @@ As a result, follow the steps below to complete the Jenkins installation.
 |[jenkins.Dockerfile](jenkins/alpine.Dockerfile)|Builds the Jenkins controller node version 2.387 with blueocean plugins.|
 |[sshd_config](jenkins/sshd_config)|Configuration parameters file to set up SSHD on each of the aget nodes.|
 
+<br/>
+
+# :movie_camera: Set up jenkins recordings
+- [jenkins setup 01](https://youtu.be/Wmkua_rMEa0)
+- [jenkins setup 02](https://youtu.be/COMh0HkeFoo)
+
+# :page_facing_up: Log file examples
+- [ansible_hello.log](logs/ansible_hello.log)
 
 # :books: References
 - [Installing Jenkins - Docker](https://www.jenkins.io/doc/book/installing/docker/)
 
-## Repositories used in this phase
+## Repositories used in this process
 - :link: [asgdevops/cd-project-ansible](https://github.com/asgdevops/cd-project-ansible)
-- :link:[asgdevops/pipelines](https://github.com/asgdevops/pipelines)
+- :link: [asgdevops/pipelines](https://github.com/asgdevops/pipelines)

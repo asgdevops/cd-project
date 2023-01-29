@@ -43,29 +43,61 @@ Having a solid coding template turns easy and quick to provision an EC2 instance
 
 |No.|Script name|Purpose or function|Links to|
 |--:|--|--|--|
-|1|[install_jenkins.sh](jenkins/install_jenkins.sh)|Jenkins installer for Ubuntu 22.04 systems. <br/> 1. Creates the `.env` environments variable file. <br/> 2. Installs Docker Engine. <br/> 3. Configures the persistent volumes directories. <br/> 4. Creates the SSH key pair (ed25519) to keep the jenkins controller and nodes working together. <br/> 5. Launches the `docker-compose.yml` file to build and run the Jenkins containers.|--> docker-compose.yml file|
-|2|[docker-compose.yml](jenkins/docker-compose.yml)|1. Builds the images of the Jenkins controller and agent nodes. <br/> 2. Creates the containers from the docker images. <br/> 3. Creates the Docker network. <br/> 4. Binds the docker volumes for persitent data.|--> jenkins.Dockerfile <br/> --> centos.Dockerfile <br/> --> debian.Dockerfile <br/> --> ubuntu.Dockerfile|
-|3|[alpine.Dockerfile](jenkins/alpine.Dockerfile)|Builds the alpine:3.17 controller node. <br/> 1. Sets up the jenkins user with root privileges. <br/> 2. Installs and configures SSHD. <br/> 3. Installs git, openJDK 11, Ansible and Terraform. ||
-|4|[centos.Dockerfile](jenkins/centos.Dockerfile)|Builds the centos:7 agent node. <br/> 1. Sets up the jenkins user with root privileges. <br/> 2. Installs and configures SSHD. <br/> 3. Installs git and openJDK 11.||
-|5|[debian.Dockerfile](jenkins/debian.Dockerfile)|Builds the debian:11 agent node. <br/> 1. Sets up the jenkins user with root privileges. <br/> 2. Installs and configures SSHD. <br/> 3. Installs git and openJDK 11.||
-|6|[ubuntu.Dockerfile](jenkins/ubuntu.Dockerfile)|Builds the ubuntu:22.04 agent node. <br/> 1. Sets up the jenkins user with root privileges. <br/> 2. Installs and configures SSHD. <br/> 3. Installs git and openJDK 11.||
+|1|[variable.tf](scripts/variable.tf)|Variables file for most of the Terraform scripts ||
+|2|[provider.tf](scripts/provider.tf)|Defines the AWS provider, vesrioning and project owner tags|
+|3|[vpc.tf](scripts/vpc.tf)|Provisions the main networking objects needed to allocate the EC2 instance such as: Vitual Private Cloud (VPC), Internet Gateway (IGW), Public Route table (RTB), Public Subnet and Security groups. It also makes the neccesary associattions between those, t0o keep the information flowing, but secure. |
+|4|[security-group.tf](scripts/security-group.tf)|Provisions the security group for allow access to the EC2 instance from the inbound HTTP port 8080 and SSH port 22.|
+|5|[instance.tf](scripts/instance.tf)|Provisions the EC2 instance according to the network configurations above.|
+|6|[provision_aws_ec2.jenkinsfile](scripts/provision_aws_ec2.jenkinsfile)|This is a declarative pipeline to integrate Terraform scripts to provision the EC2 instance. It uses CloudBees AWS plugin, to store the AWS Account Credentials. It also calls the 'alpine_controller' agent node, since it contains the Terraform packages to run the Terraform scripts. |
+
+Notice the Jenkins Pipeline job, lives in the [asgdevops/cd-project-terraform](https://github.com/asgdevops/cd-project-terraform) GitHub repository. 
+
+So when running a Build process, it gets polled crom GitHub SCM.
+
 
 The process below will be replicated on the AWS EC2 instance.
 As a result, follow the steps below to complete the Jenkins installation.
 
-# Steps
+# Running the EC2 povisioning pipeline
 
-1. Ensure the Ubuntu VM is running and start a new SSH session.
+1. Go to Jenkins **Dashboard**
+2. Click on **+ New Item**
+3. Type `provision_aws_ec2.pipeline` 
+4. Select **Piepline** and click **OK**
+5. Fill in the follwing fields
+    - Check **Discard Old builds** to save disk space.
+    - Choose the number of days or runs you would like to keep. 
 
-    ```bash
-    ssh ansalaza@localhost -p 2210
-    ```
+        |![jenkins](images/jenkins_tf_pipeline_01.png)|
+        |:--:|
+        |Figure 1 - Discard Old Builds|
 
-    |![jenkins](images/jenkins_setup_01.png)|
+    - In the Pipeline section select the following:
+      - Definition: **Pipeline Script from SCM**
+        - SCM: **Git**
+        - Repository URL: [asgdevops/cd-project-terraform](https://github.com/asgdevops/cd-project-terraform.git)
+        - Branch Specifier (blank for 'any'): ***/main**
+        - Script Path: [provision_aws_ec2.jenkinsfile](https://github.com/asgdevops/cd-project-terraform/blob/main/provision_aws_ec2.jenkinsfile)
+        - **Save**.
+
+        |![jenkins](images/jenkins_tf_pipeline_02.png)|
+        |:--:|
+        |Figure 2- Pipeline Script from SCM|
+
+6. Build and monitor the job progress.
+
+    |![jenkins](images/jenkins_tf_pipeline_03.png)|
     |:--:|
-    |Figure 1 - SSH log into VM |
+    |Figure 3 - Pipeline build|
 
+<br/>
 
+# :movie_camera: Set up jenkins recording
+- [Provisioning AWS EC2 Instance with Jenkins](https://youtu.be/HOLtCd-BaNo)
+
+# :page_facing_up: Log file examples
+- [provision_aws_ec2.pipeline.log](logs/provision_aws_ec2.pipeline.log)
 
 # :books: References
-- [Installing Jenkins - Docker](https://www.jenkins.io/doc/book/installing/docker/)
+- [Define Infrastructure with Terraform Resources](https://developer.hashicorp.com/terraform/tutorials/configuration-language/resource?in=terraform%2Fconfiguration-language)
+

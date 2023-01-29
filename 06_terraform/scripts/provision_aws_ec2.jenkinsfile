@@ -7,20 +7,11 @@ pipeline {
     }
 
     options { skipDefaultCheckout(true) }
-  
+
     stages {
 
-        stage('clean workspace') {
-            steps {
-                cleanWs()
-            }
-        }
-
-        stage('checkout') {
-            steps {
-                checkout scm
-            }
-        }
+        stage('clean workspace') { steps { cleanWs() } }
+        stage('checkout') { steps { checkout scm } }
 
         stage('provision') {
             steps {
@@ -33,6 +24,5 @@ pipeline {
         }
 
     }
-
     post { always { cleanWs() } }    
 }

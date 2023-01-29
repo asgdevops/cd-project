@@ -179,6 +179,16 @@
     |:--:|
     |Figure 20 - hello_world.java pushed to GitHub repo|
 
+<br/>
+
+# :movie_camera: Webhook Trigger with Github and Jenkins
+- [Set up a GitHub Webhook](https://youtu.be/VRUgmVWLQxA)
+
+# :page_facing_up: Log file examples
+- [java_hello.log](logs/java_hello.log)
+- [ansible_install_apache_deb.log](logs/ansible_install_apache_deb.log)
+- [ansible_install_apache_rhel.log](logs/ansible_install_apache_rhel.log)
+
 # References
 - [GitHub Repository Webhooks](https://ngrok.com/docs/integrations/github/webhooks)
 
