@@ -123,15 +123,6 @@ set_directories() {
   sudo chmod -R g+rwx ${base};
   sudo chown $USER:docker .env;
 
-  # create docker directory structure
-  [ ! -d ${certs_ca_dir} ] && sudo mkdir -p ${certs_ca_dir};
-  [ ! -d ${certs_client_dir} ] && sudo mkdir -p ${certs_client_dir};
-
-  sudo chown -R $USER:docker ${certs_ca_dir};
-  sudo chown -R $USER:docker ${certs_client_dir};
-  sudo chmod -R g+rwx ${certs_ca_dir};
-  sudo chmod -R g+rwx ${certs_client_dir};
-
   echo "Directory structure completed successfully.";
   tree ${base};
 }
