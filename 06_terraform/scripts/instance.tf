@@ -2,8 +2,8 @@
 # AWS EC2 Instance creation
 # App node 1
 resource "aws_instance" "app-instance-1" {
-    ami               = "${var.ami}"
-    instance_type     = "${var.instance-type}"
+    ami               = "${var.ami-medium}"
+    instance_type     = "${var.instance-type-medium}"
 
     # Attach Instance to Private Subnet 1
     subnet_id = aws_subnet.public-subnet-1.id
@@ -20,6 +20,6 @@ resource "aws_instance" "app-instance-1" {
     }
 
     tags = { 
-        "Name" = "cdp-ec2-instance-1" 
+        "Name" = "${var.ec2-instance-name}" 
     }
 }

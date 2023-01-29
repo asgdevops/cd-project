@@ -1,4 +1,4 @@
-# :book: Configure a virtual network with Oracle VM VirtualBox Manager
+# :book: 3. Configure a virtual network with Oracle VM VirtualBox Manager
 
 By [Antonio Salazar](mailto:antonio.salazar@ymail.com) - January 2023
 

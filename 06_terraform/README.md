@@ -1,70 +1,38 @@
-# :book: 5. Installing and configuring Jenkins
+# :book: 6. Provision an AWS EC2 Instance 
 
 ## Goal 
-- Provision Jenkins in a Virtual Machine running on ubuntu Server 22.04 "jammy".
-- The Jenkins instace must be running as a docker container.
-- Set up four agent nodes running as docker containers too.
-- All of the containers should be running on the same docker network.
-- Use one of the node instances as Ansible controller.
+- Provision an AWS EC2 instance from a Jenkins pipeline.
+- The pipeline has to pull the script from a GitHub SCM repository.
+- It also launches the Terraform scripts in charge of provisioning the AWS EC2 instance.
 
 ## Requiremens
-According to [Jenkins on Docker](https://www.jenkins.io/doc/book/installing/docker/) documentation, the requirements demand at least 256MB of RAM and 10 GB of disk.
-
-The resources used in this lab, presented in this document, are configured in the following way:
-
-**Virtual Hardware**
-- 8GB of RAM.
-- 4 CPUs.
-- 10GB of the bootable disk.
-- 30GB of the data disk.
-- Intel Nic Network device.
-
-**Software**
-- Virtual Machine running on Oracle VirtualBox.
-- Ubuntu 22.04 server ("jammy") operating system.
-- git 2.25.1 is already installed with the system.
-- Python 3.8.10 is already installed with the system.
-- Jenkins 2.387
-- Docker 20.10.23
+- Signup with a Free Tier accoutn in AWS.
+- Set up the Terraform scripts to create the objects below:
+  - Virtual Private Network (VCP).
+  - Public Subnet.
+  - Public Route table.
+  - Internet Gateway.
+  - Create the security groups fro HTTP and SSH ports.
+  - Associate the Network objects accordingly.
+  - Use a current key-pair
+  - Create and Launch an EC2 instance.
 
 
-In case your Virtual Machine requires additional disk space, follow the directions below to add more space:
-## Prepare Jenkins storage
-
-1. Execute the steps found at [Adding storage ](adding_storage/README.md)
-2. Create jenkins persistent directories
-
-  - Jenkins app data
-   
-    ```bash
-    sudo mkdir -p /data/jenkins_home && sudo chown -R $USER:docker /data/jenkins_home ;
-    ```
-
-- Jenkins certificates
-
-    ```bash
-    sudo mkdir -p /data/jenkins_cert/ca ;
-    sudo mkdir -p /data/jenkins_cert/client ;
-    sudo chown -R $USER:docker /data/jenkins_cert ;
-    ```
-
-  
 # Architecture
 
-The solution proposed in this document consists of a Controller - Worker model running on Docker containers. 
 
-The containers run on a Docker network where the Jenkins controller and nodes run. Each node is set up as a permanent Jenkins agent but running on an individual docker container.
+The architecture followed in this document consists of a single instance living in its subnet and VPC accoringly.
 
-The application data is saved in a docker volume to keep it persistent.
+The EC2 has the HTTP port 8080 and the SSH port 22 open by the security group. 
 
-Each node has a different operating system:
-- The Alpine node functions as the Ansible controller.
-- Whereas the CentOs, Debian and Ubuntu are the worker nodes.
+The route table is associated with the public subnet and the Internet Gateway, so that the EC2 instance could be accessed from any part.
+
+The login access is achieved by the ssh key-pair.
 
   ||
   |:--:|
-  |![diagram](images/jenkins_architecture_diagram.png)|
-  |Fig 1. Jenkins Architecture Model|
+  |![diagram](images/aws_infra_architecture.png)|
+  |Fig 1. AWS EC2 instance architecture|
 
 # Installation 
 

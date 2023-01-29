@@ -1,4 +1,4 @@
-# :book: Build a home laboratory with VirtualBox
+# :book: 1. Build a home laboratory with VirtualBox
 
 Author: [Antonio Salazar Gomez](mailto:antonio.salazar@ymail.com). 
 
@@ -28,7 +28,7 @@ This document shows an example of building a home laboratory capable of connecti
 
 # :bookmark_tabs: Table of Contents
 
-- [:book: Build a home laboratory with VirtualBox](#book-build-a-home-laboratory-with-virtualbox)
+- [:book: 1. Build a home laboratory with VirtualBox](#book-1-build-a-home-laboratory-with-virtualbox)
 - [Description](#description)
 - [Work Summary](#work-summary)
 - [Requisites](#requisites)

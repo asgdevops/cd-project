@@ -1,4 +1,4 @@
-# :book: Create a new Ubuntu 22.04 Virtual Machine in VirtualBox
+# :book: 2. Create a new Ubuntu 22.04 Virtual Machine in VirtualBox
 By [Antonio Salazar](mailto:antonio.salazar@ymail.com) - September 2022
 
 **Document log**

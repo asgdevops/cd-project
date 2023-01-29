@@ -1,6 +1,6 @@
 # Create Security Group for the Application Load Balancer
 resource "aws_security_group" "http-security-group" {
-  name        = "ALB Security Group"
+  name        = "HTTP Security Group"
   description = "Enable HTTP access on Port 8080"
   vpc_id      = aws_vpc.vpc.id
 

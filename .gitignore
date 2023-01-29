@@ -8,3 +8,4 @@ logs/
 *.logs
 .terraform
 terraform.tfvars
+*key*

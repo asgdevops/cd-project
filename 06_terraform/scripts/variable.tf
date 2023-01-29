@@ -15,15 +15,6 @@ variable "project" {
 }
 
 
-# Access variables
-variable "access-key" {
-  description = "Access key to AWS console"
-}
-
-variable "secret-key" {
-  description = "Secret key to AWS console"
-}
-
 variable "region" {
   default     = "us-east-1"
   description = "VPC default Region"
@@ -50,19 +41,37 @@ variable "public-subnet-1-cidr" {
     type        = string 
 }
 
-# Instance variables
-variable "ami" {
-  # default     = "ami-09e67e426f25ce0d7" # ubuntu-focal-20.04-amd64-server-20210430
+# EC2 Instance variables
+variable "ami-micro" {
   default     = "ami-052efd3df9dad4825" # jammy-22.04-amd64-server-20220609
   description = "AWS Ubuntu 22.04 Image"
   type        = string
 }
 
-variable "instance-type" {
+variable "ami-medium" {
+  default     = "ami-00874d747dde814fa" # jammy-22.04-amd64-server-20220609
+  description = "AWS Ubuntu 22.04 Image"
+  type        = string
+}
+
+variable "instance-type-micro" {
   default     = "t2.micro"
   description = "AWS T2 Micro EC2 Instance"
   type        = string
 }
+
+variable "instance-type-medium" {
+  default     = "t2.medium"
+  description = "AWS T2 Medium EC2 Instance"
+  type        = string
+}
+
+variable "ec2-instance-name" {
+  default     = "cdp-jenkins-ec2-instance-1"
+  description = "AWS EC2 Instance Name"
+  type        = string
+}
+
 
 # SSH variables
 variable "ssh-location" {
@@ -72,13 +81,13 @@ variable "ssh-location" {
 }
 
 variable "key-pair" {
-  default     = "kp-antonio"
+  default     = "asg-kp"
   description = "ssh key pair name"
   type        = string
 }
 
 variable "pem-file" {
-  default     = "kp-antonio.pem"
+  default     = "asg-kp.pem"
   description = "pem filename"
   type        = string
 }
