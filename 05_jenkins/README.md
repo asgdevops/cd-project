@@ -386,9 +386,8 @@ As a result, follow the steps below to complete the Jenkins installation.
     |:--:|
     |Figure 11c - Permanent Agent|
 
-# :movie_camera: Set up jenkins recordings
-- [Set up Jenkins on AWS EC2](videos/Setup_jenkins.mkv)
-
+# :movie_camera: Set up jenkins recording
+- [Set up Jenkins on AWS EC2](https://youtu.be/cWMcIWrqJ3U)
 
 # :books: References
 - [Installing Jenkins - Docker](https://www.jenkins.io/doc/book/installing/docker/)
