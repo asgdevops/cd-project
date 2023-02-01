@@ -9,3 +9,6 @@ logs/
 .terraform
 terraform.tfvars
 *key*
+*.zip
+*.pdf
+*.drawio
